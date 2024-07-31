@@ -119,3 +119,29 @@ CREATE TABLE Trainees(
 	Batch VARCHAR(20)
 );
 GO
+
+--Evidence 4
+IF EXISTS (
+	SELECT * FROM sys.objects where object_id= OBJECT_ID('Trainees') AND type in ('U')
+)
+BEGIN
+	DROP TABLE Trainees
+END;
+GO
+CREATE TABLE Trainees
+(
+	TraineeID CHAR(9) NOT NULL PRIMARY KEY CHECK(LEN(TraineeID)=9),
+	TraineeName VARCHAR(40) NOT NULL,
+	Batch VARCHAR(20)
+);
+GO
+
+EXEC sp_helpconstraint Trainees;
+GO
+
+INSERT INTO Trainees
+VALUES('001284615','Samaul','61');
+GO
+
+SELECT * FROM Trainees;
+go
