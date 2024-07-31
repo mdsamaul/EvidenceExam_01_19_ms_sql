@@ -88,3 +88,34 @@ GO
 
 EXEC sp_renamedb '1284615','T_SQL';
 GO
+
+--evidences 3
+/*
+A. Create a table ‘Trainees’ with columns as below 
+ 
+Column Name Key Data Type Length Auto increament Allow Nulls 
+TraineeID Primary Key int  Yes no 
+TraineeName  Varchar 40  No 
+Batch  Varchar 20  No 
+You have to make sure that if Trainees table in the current database, the table will be deleted first  
+[Hint: use if exists(….)] 
+*/
+
+CREATE DATABASE EV3;
+GO
+USE EV3;
+GO
+IF EXISTS (
+SELECT * FROM sys.objects where object_id=OBJECT_ID('Trainees') AND type in (N'U'))
+BEGIN 
+	DROP TABLE Trainees;
+END
+GO
+
+--CREATE
+CREATE TABLE Trainees(
+	TraineeID INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
+	TraineeName VARCHAR(40) NOT NULL,
+	Batch VARCHAR(20)
+);
+GO
