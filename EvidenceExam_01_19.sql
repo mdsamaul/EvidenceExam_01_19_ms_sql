@@ -1,3 +1,4 @@
+
 --evidence 1
 
 --A. Show me all the databases under the SQL Server you are working 
@@ -47,7 +48,7 @@ One Log file of
 CREATE DATABASE T_SQL
 ON PRIMARY(
 	NAME='t_sql_data_file',
-	FILENAME='D:\isdb\SQL\Evidence\code\EvidenceExam_01_19\file\t_sql_data_file.mdf',
+	FILENAME='D:\isdb\SQL\Evidence\code\file\t_sql_data_file.mdf',
 	SIZE=10MB,
 	MAXSIZE=100MB,
 	FILEGROWTH=10%
@@ -55,7 +56,7 @@ ON PRIMARY(
 )
 LOG ON(
 	NAME='t_sql_log_file',
-	FILENAME='D:\isdb\SQL\Evidence\code\EvidenceExam_01_19\file\t_sql_log_file.ldf',
+	FILENAME='D:\isdb\SQL\Evidence\code\file\t_sql_log_file.ldf',
 	SIZE=10MB,
 	MAXSIZE=100MB,
 	FILEGROWTH=10%
@@ -121,6 +122,21 @@ CREATE TABLE Trainees(
 GO
 
 --Evidence 4
+
+/*
+Evidence 4 
+ 
+A. Create a table ‘Trainees’ with columns as below 
+ 
+Column Name Key Data Type Length Constraint Allow Nulls 
+TraineeID Primary Key CHAR 9 Value must have 
+9 digits 
+no 
+TraineeName  Varchar 40  No 
+Batch  Varchar 20  No 
+B. Show the constraints present in the table 
+C. Insert some test data 
+*/
 IF EXISTS (
 	SELECT * FROM sys.objects where object_id= OBJECT_ID('Trainees') AND type in ('U')
 )
@@ -135,13 +151,29 @@ CREATE TABLE Trainees
 	Batch VARCHAR(20)
 );
 GO
-
+-- Query to show the constraints present in the Trainees table
 EXEC sp_helpconstraint Trainees;
 GO
-
+-- Query to show the constraints present in the Trainees table
+SELECT 
+    tc.CONSTRAINT_NAME, 
+    tc.CONSTRAINT_TYPE, 
+    ccu.COLUMN_NAME 
+FROM 
+    INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc 
+    JOIN INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE ccu 
+    ON tc.CONSTRAINT_NAME = ccu.CONSTRAINT_NAME 
+WHERE 
+    tc.TABLE_NAME = 'Trainees';
+GO
+--C. Insert some test data 
 INSERT INTO Trainees
 VALUES('001284615','Samaul','61');
 GO
+INSERT INTO Trainees
+VALUES
+('001284616', 'Arafat','61');
+GO
 
 SELECT * FROM Trainees;
-go
+GO
