@@ -177,3 +177,74 @@ GO
 
 SELECT * FROM Trainees;
 GO
+
+
+/*
+Evidence 5 
+ 
+A. Create tables ‘tsps’ and  ‘Trainees’ with columns and relation as below 
+ 
+ 
+   
+tsps
+ tspid int No
+ tspname varchar(50) Yes
+ Column Name Condensed Type Nullable Identity
+ Trainees
+ traineeid int No
+ traineename varchar(50) No
+ tspid int Yes
+ Column Name Condensed Type Nullable Identity
+ 
+ 
+B. Insert some test data into both tables 
+C. Create a view that shows all trainee info with which tsp each trainee is in. 
+*/
+
+IF EXISTS(SELECT * FROM sys.objects WHERE object_id= OBJECT_ID('tsps') AND type in('U'))
+BEGIN
+	DROP TABLE tsps
+END
+CREATE TABLE tsps(
+	tspid INT NOT NULL IDENTITY PRIMARY KEY,
+	tspname VARCHAR(50)
+);
+GO
+
+
+
+
+IF EXISTS (SELECT * FROM  sys.objects WHERE object_id=OBJECT_ID('Trainees') AND type in('U')
+
+)
+BEGIN
+	DROP TABLE Trainees
+END
+CREATE TABLE Trainees
+(
+	traineeid INT NOT NULL PRIMARY KEY IDENTITY,
+	traineename VARCHAR(50),
+	tspid INT REFERENCES tsps(tspid)
+);
+GO
+
+--B. Insert some test data into both tables 
+INSERT INTO tsps
+VALUES('US Software ltd');
+GO
+
+INSERT INTO Trainees
+VALUES
+('Md Samaul Islam',1),
+('Arafat',1),
+('Mimma',1);
+GO
+
+--C. Create a view that shows all trainee info with which tsp each trainee is in. 
+CREATE VIEW JustView 
+	AS
+	SELECT tr.traineeid, tr.traineename,ts.tspname
+	FROM Trainees tr
+	JOIN tsps ts
+	ON tr.tspid=ts.tspid
+	GO
