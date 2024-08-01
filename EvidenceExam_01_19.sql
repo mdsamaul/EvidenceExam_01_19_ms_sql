@@ -248,3 +248,34 @@ CREATE VIEW JustView
 	JOIN tsps ts
 	ON tr.tspid=ts.tspid
 	GO
+
+
+select * from JustView;
+go
+
+/*
+Evidence 6 
+ 
+A. create a table persons which has two columns 
+person id: auto incrementing value by the SQL server starting from 100 and incrementing by 5 
+person name: holds textual data, maximum 30 characters 
+B. Enter the following person names to the table 
+Kamal, Jamal, Aslam 
+C. Show me the data is present in the table 
+*/
+
+--A. create a table persons which has two columns 
+--person id: auto incrementing value by the SQL server starting from 100 and incrementing by 5 
+--person name: holds textual data, maximum 30 characters 
+CREATE TABLE persons
+(
+	personid INT NOT NULL IDENTITY(100,5) PRIMARY KEY,
+	personname VARCHAR(30)
+);
+GO
+--Enter the following person names to the table 
+--Kamal, Jamal, Aslam 
+INSERT INTO persons
+VALUES
+('Kamal'),('Jamal'),('Aslam');
+GO
