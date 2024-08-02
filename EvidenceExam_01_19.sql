@@ -715,3 +715,70 @@ go
 
 select * from Products;
 go
+
+/*
+Evidence 15 
+ 
+A. Create a table Reservations as defined 
+ 
+Column Datatype Nullability 
+Id IDENTITY NOT NULL 
+Room INT NOT NULL 
+Date DateTime NOT NULL 
+B. Create a stored procedure with appropriate parameters to insert data into the Reservations table.  
+C. Insert the following data into the table using the procedure you created 
+Id Room Date 
+1 105 2008-01-01 
+2 109 2008-02-21 
+3 114 2008-02-01 
+D. Create a view that shows all the reservations in year 2008. 
+E. Create a view that shows all the reservations in February of 2008.
+*/
+--A. Create a table Reservations as defined 
+
+create table Reservations
+(
+	Id int identity not null primary key,
+	Room int not null,
+	Date datetime not null
+);
+go
+
+--B. Create a stored procedure with appropriate parameters to insert data into the Reservations table.  
+create procedure InsertReservations 
+@room int,
+@date datetime
+as
+begin 
+	insert into Reservations (Room, Date)
+	values(@room,@date);
+end
+
+
+--C. Insert the following data into the table using the procedure you created 
+exec InsertReservations @room=105, @date = '2008-01-01'; 
+exec  InsertReservations @room=109, @date='2008-02-21';
+exec  InsertReservations @room=114, @date='2008-02-01';
+
+--D. Create a view that shows all the reservations in year 2008. 
+create view showReservations as
+select id, Room, date
+from Reservations
+where year(date)=2008;
+go
+
+--E. Create a view that shows all the reservations in February of 2008. 
+create view showReservationsFeb as
+select *
+from Reservations
+where year(date) = 2008 and month(date)=2;
+go
+
+
+select * 
+from showReservations;
+go
+
+select * 
+from showReservationsFeb;
+go
