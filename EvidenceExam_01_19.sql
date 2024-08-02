@@ -279,3 +279,97 @@ INSERT INTO persons
 VALUES
 ('Kamal'),('Jamal'),('Aslam');
 GO
+--C. Show me the data is present in the table 
+SELECT * FROM persons;
+GO
+
+/*
+Evidence 7 
+ 
+A. A table has two column 
+Column 1 : auto incrementing integer value, SQL Server to generate automatically 
+Column 2 : GUID value, SQL Server to generate automatically 
+B. Insert 5 rows of data into the table 
+C. Find out the last values inserted into the column 1 
+D. You want to insert a row with value 250 in Column 1. Show how you do it. 
+E. Show me all the rows in the table
+*/
+
+create table ev7(
+column1 INT IDENTITY,
+column2 UNIQUEIDENTIFIER
+);
+GO
+
+INSERT INTO ev7
+VALUES
+(NEWID()),
+(NEWID()),
+(NEWID()),
+(NEWID()),
+(NEWID()),
+(NEWID());
+GO
+
+SELECT * FROM ev7;
+
+--C. Find out the last values inserted into the column 1 
+select @@IDENTITY
+
+
+--D. You want to insert a row with value 250 in Column 1. Show how you do it.
+set identity_insert ev7 on;
+insert into ev7 (column1, column2)
+values(250, newid());
+go
+set identity_insert ev7 off;
+--E. Show me all the rows in the table 
+select * from ev7;
+
+
+/*
+Evidence 8 
+ 
+A. Create a table ‘Contacts’ with columns as below 
+ 
+Column Name Data Type Length Allow Nulls 
+ContactID Int  No 
+ContactName Varchar 30 No 
+B. Change the length of ContactName column to 50 
+C. Add the following columns to the table 
+ 
+Column Name Data Type Length Allow Nulls 
+ContactTel Varchar 16 Yes 
+ContactCell Varchar 16 Yes 
+ 
+ 
+D. Insert following data into the table 
+ 
+ContactID ContactName ContactTel ContactCell 
+1 Quazi Ashique  0172889933 
+2 Hasinur Shahid 805098 0152980890 
+3 Mir Mosharaf  0181076543 
+4 Shaheen Akter   
+   
+E. Add the following column to the table 
+ 
+Column Name Data Type Length Allow Nulls Default value 
+ContactAddress Varchar 100 No Not available 
+F. Show me all the rows in the table. 
+*/
+use T_SQL;
+go
+--A. Create a table ‘Contacts’ with columns as below
+create table Contacts
+(
+	ContactID int not null,
+	ContactName varchar(30) not null
+);
+go
+--B. Change the length of ContactName column to 50 
+alter table Contacts
+alter column ContactName varchar(50);
+go
+--see the size
+exec sp_help Contacts;
+go
