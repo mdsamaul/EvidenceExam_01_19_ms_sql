@@ -782,3 +782,71 @@ go
 select * 
 from showReservationsFeb;
 go
+
+/*
+Evidence 16 
+ 
+A. Create the “Promotion Sales” as described below 
+Column Datatype Nullability 
+Product VARCHAR(30) NOT NULL 
+Price MONEY NOT NULL 
+DiscountRate INT NOT NULL 
+ 
+B. Create a stored procedure to insert data into the “Promotion Sales” table. Define necessary parameter and make sure 
+the parameter for DiscountRate value has default value 5 so that if DiscountRate is not supplied, the default value is 
+inserted. 
+C.  Insert the following records into  “Promotion Sales” using the procedure 
+Product Price DiscountRate 
+Jeans 1050 12 
+Shoe 1200 7 
+Shirt 800 5 
+ 
+D. Create a view that select all the column in “Promotion Sales” and an extra column that shows discounted price by 
+deducting discount from price. A query on the view will a resultset like below 
+Product Price DiscountRate DiscountedPrice 
+Jeans 1050.00 12 924.00 
+Shoe 1200.00 7 1116.00 
+Shirt 800.00 5 760.00 
+*/
+
+--A. Create the “Promotion Sales” as described below 
+create table PromotionSales
+(
+	Product varchar(30) not null,
+	Price money not null,
+	DiscountRate int not null
+);
+go
+
+--Create a stored procedure to insert data into the “Promotion Sales” table. Define necessary parameter and make sure 
+--the parameter for DiscountRate value has default value 5 so that if DiscountRate is not supplied, the default value is 
+--inserted. 
+create procedure insertPromotionSales 
+@Product varchar(30),
+@Price money,
+@DiscountRate int = 5
+as
+begin
+	insert into PromotionSales
+	values(@Product, @Price, @DiscountRate);
+
+end;
+go
+
+--C.  Insert the following records into  “Promotion Sales” using the procedure
+exec insertPromotionSales 'Jeans',1050,12;
+exec insertPromotionSales 'Shoe',1200,7;
+exec insertPromotionSales 'Shirt',800,5;
+
+select  * from PromotionSales;
+
+
+--Create a view that select all the column in “Promotion Sales” and an extra column that shows discounted price by 
+--deducting discount from price. A query on the view will a resultset like below 
+create view viewPromotionSales
+as
+select Product, Price, DiscountRate, Price- (Price*DiscountRate/100) as DiscountPrice
+from PromotionSales;
+
+select *
+from viewPromotionSales;
