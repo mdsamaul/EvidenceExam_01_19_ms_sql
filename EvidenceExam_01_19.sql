@@ -635,3 +635,83 @@ go
 
 --see the table
 select * from Products;
+
+/*
+	Evidence 14 
+ 
+A. Create two table as shown below 
+ 
+B. Create relation between two table on CategoryId-to-CategoryId columns with cascade delete rule 
+ 
+C. Insert Following Data in Categories Table 
+CategoryId  CategoryName     ----------- ---------------  
+1           Beverages 
+2           Condiments 
+3           Confections 
+   
+D. Insert Following data in Products table 
+productid   productname                              categoryid  unitprice              
+ ----------- ----------------------------------------  -----------  ---------------------  
+ 1           Chai                                      1            18.0000 
+ 2           Chang                                     1             19.0000 
+ 3           Aniseed Syrup                            2             10.0000 
+ 4           Chef Anton's Cajun Seasoning         2             22.0000 
+ 5           Chef Anton's Gumbo Mix                 2            21.3500 
+ 6           Grandma's Boysenberry Spread       2            25.0000 
+E. Now delete the row with CategoryID 1 from Categories table 
+F. Show that Children of the deleted category are deleted automatically 
+*/
+
+--A. Create two table as shown below 
+create table Categories
+(
+	CategoruID int not null primary key,
+	CategoryName nvarchar(15) not null
+);
+go
+
+create table Products(
+	ProductID int not null primary key,
+	ProductName nvarchar(40) not null,
+	CategoryID int null ,
+	UnitPrice money null
+);
+go
+
+--B. Create relation between two table on CategoryId-to-CategoryId columns with cascade delete rule 
+alter table Products
+add constraint fk_productid foreign key (CategoryID)
+references Categories(CategoruID)
+on delete cascade;
+go
+
+--Insert Following Data in Categories Table
+insert into categories
+values
+(1,'Beverages'),
+(2,'Condiments'),
+(3,'Confections');
+go
+
+--Insert Following data in Products table 
+insert into Products
+values
+(1,'Chai',1,18000),
+(2,'Chang',1,19000),
+(3,'Aniseed Syrup',2,10000),
+(4,'Chef Anton''s Cajun Seasoning',2,22000),
+(5,'Chef Anton''s Gumbo Mix',2,21000),
+(6,'Grandma''s Boysenberry Spread',2,25000);
+go
+
+--E. Now delete the row with CategoryID 1 from Categories table 
+delete Categories
+where CategoruID=1;
+go
+
+---F. Show that Children of the deleted category are deleted automatically 
+select * from Categories;
+go
+
+select * from Products;
+go
