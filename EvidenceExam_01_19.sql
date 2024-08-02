@@ -373,3 +373,71 @@ go
 --see the size
 exec sp_help Contacts;
 go
+
+--C. Add the following columns to the table
+alter table Contacts
+add 
+	ContactTel varchar(16),
+	ContactCell varchar(16);
+go
+--Insert following data into the table
+insert into Contacts
+values
+(1,'Quazi Ashique','','0172889933'),
+(2,'Hasinur Shahid','805098','0152980890'),
+(3,'Mir Mosharaf','','0181076543'),
+(4,'Shaheen Akter','','');
+go
+
+--E. Add the following column to the table
+alter table Contacts
+add ContactAddress varchar(100) not null default 'Not avilable';
+go
+
+--F. Show me all the rows in the table. 
+select * from Contacts;
+go
+
+
+/*
+Evidence 9 
+ 
+A. Create a table ‘Books with columns as below 
+ 
+Column Name Data Type Length Allow Nulls Default value 
+Name char 30 No  
+Publisher Varchar 30 No N/A 
+Price Money  Yes  
+Publish Smalldatetime  Yes  
+CurrentEdition Int  No 1 
+Available Bit  No 0 
+B. Insert following data into the table 
+ 
+Name Publisher Price Publish CurrentEdition Available 
+Programming Practice Show&Tell Consulting 600.00 2004-01-01 3 1 
+Introducing C# Show&Tell Consulting 700.00 2003-03-03 4 0 
+SQL Server 2000 BPB 1000.00 2002-01-01 2 1 
+XML N/A 700.00  1 0
+*/
+--A. Create a table ‘Books with columns as below
+create table Books
+(
+	Name char(30) not null default 'N/A',
+	Publisher varchar(30) not null ,
+	Price money,
+	Publish smalldatetime,
+	CurrentEdition int not null default 1,
+	Available bit not null default 0
+);
+go
+
+--B. Insert following data into the table 
+insert into  Books 
+values
+('Programming Practice','Show&Tell Consulting',600.00,'2004-01-01',3,1),
+('Introducing C#','Show&Tell Consulting',700.00,'2003-01-01',3,0),
+('SQL Server 2000','BPB',1000.00,'2002-01-01',2,1),
+('XML','N/A',700.00,'',1,0);
+go
+
+SELECT * from books;
