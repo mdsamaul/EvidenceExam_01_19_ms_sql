@@ -441,3 +441,45 @@ values
 go
 
 SELECT * from books;
+
+/*
+Evidence 10 
+ 
+D. Create a table ‘Expenses’ with columns as below 
+ 
+Column Name Computed Data Type Length Allow Nulls Formula 
+date  Smalldatetime  No  
+Item  Varchar 40 No  
+Price  Money  No  
+Quantity  Int  No  
+Amount Yes    Price * Quantity 
+E. Today you have the following expenses 
+ 
+Item Price Quantity 
+Travel Bag 450 1 
+Punjabi 250 2 
+Tooth brush 15 3 
+ Insert these data to expenses table 
+F. Show all data from the table 
+*/
+
+--D. Create a table ‘Expenses’ with columns as below
+create table Expenses(
+	date smalldatetime not null,
+	Item varchar(40) not null,
+	Price money not null,
+	Quantity int not null,
+	Amount AS (price*Quantity)
+);
+go
+--E. Today you have the following expenses
+insert into Expenses
+values
+(getdate(),'Travel Bag',450,1),
+(getdate(),'Punjabi',250,2),
+(getdate(),'Tooth Brush',15,3);
+go
+
+--Show all data from the table 
+select * from Expenses;
+go
