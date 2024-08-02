@@ -528,3 +528,39 @@ go
 --D. Drop the table 
 drop table Orders;
 go
+
+/*
+Evidence 12 
+ 
+A. Create a table ‘Orders’ with columns as below 
+ 
+Column Name Data Type Auto increament Allow Nulls 
+OrderId Int Yes No 
+OrderDate SmalldateTime  Not Null 
+ProductId Int  No 
+ 
+   
+Quantity Int  No 
+ShipDate SmalldateTime  Yes 
+ 
+B. Add Primary Key to OrderId Column at Orders Table 
+C. Add Check constraint for Quantity column so that it is always greater than 0 
+D. Add Default value Current Date for OrderDate Column 
+E. Check that constrains are created for the table
+*/
+
+--A. Create a table ‘Orders’ with columns as below 
+create table Orders(
+	OrderId int identity not null,
+	OrderDate smalldatetime not null,
+	ProductId int not null,
+	Quantity int not null,
+	ShipDate smalldatetime ,
+);
+go
+
+--B. Add Primary Key to OrderId Column at Orders Table 
+alter table Orders
+add constraint PK_OrderId primary key (Orderid);
+
+--C. Add Check constraint for Quantity column so that it is always greater than 0
