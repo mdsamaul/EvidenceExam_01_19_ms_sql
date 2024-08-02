@@ -564,3 +564,74 @@ alter table Orders
 add constraint PK_OrderId primary key (Orderid);
 
 --C. Add Check constraint for Quantity column so that it is always greater than 0
+alter table orders
+add constraint chk_Quantity check(Quantity>0);
+go
+
+--D. Add Default value Current Date for OrderDate Column 
+alter table orders
+add constraint def_orderdata default getdate() for OrderDate;
+go
+
+--Check that constrains are created for the table 
+exec sp_helpconstraint Orders;
+go
+
+/*
+Evidence 13 
+ 
+A. Create two tables and create relationship between then as shown below 
+ 
+B. Insert Following Data in Categories Table 
+CategoryId  CategoryName     ----------- ---------------  
+1           Beverages 
+2           Condiments 
+3           Confections 
+C. Insert Following data in Products table 
+productid   productname                              categoryid  unitprice              
+ ----------- ----------------------------------------  -----------  ---------------------  
+ 1           Chai                                      1            18.0000 
+ 2           Chang                                     1             19.0000 
+ 3           Aniseed Syrup                            2             10.0000 
+ 4           Chef Anton's Cajun Seasoning         2             22.0000 
+ 5           Chef Anton's Gumbo Mix                 2            21.3500 
+ 6           Grandma's Boysenberry Spread       2            25.0000 
+*/
+
+--A. Create two tables and create relationship between then as shown below 
+create table Categories(
+CategoryID int not null primary key,
+CategoryName nvarchar(15) not null
+);
+go
+
+create table Products(
+	ProductID int not null primary key,
+	ProductName nvarchar(40) not null,
+	CategoryId int null,
+	UnitPrice money null,
+	foreign key (CategoryID) references Categories(CategoryID)
+);
+go
+
+--Insert Following Data in Categories Table
+insert into Categories
+values
+(1,'Beverages'),
+(2,'Condiments'),
+(3,'Confections');
+go
+
+-- Insert Following data in Products table 
+insert into Products
+values
+(1,'Chai',1,18000),
+(2,'Chang',1,19000),
+(3,'Chef Anton''s Cajun Seasoning',2,10000),
+(4,'Chef Anton''s Cajun Seasoning',2,22000),
+(5,'Chef Anton''s Gumbo Mix',2,21000),
+(6,'Grandma''Boysenberry Spread',2,25000);
+go
+
+--see the table
+select * from Products;
