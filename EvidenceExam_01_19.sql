@@ -483,3 +483,48 @@ go
 --Show all data from the table 
 select * from Expenses;
 go
+
+
+/*
+Evidence 11 
+ 
+A. Create a table ‘Orders’ with columns as below 
+ 
+Column Name Data Type Auto increament Allow Nulls Constraint 
+OrderId Int Yes No Primary Key 
+OrderDate SmalldateTime  No Default value Current 
+Date 
+ProductId Int  No  
+Quantity Int  No it is always over 0 
+ShipDate SmalldateTime  Yes It must be greater 
+than Orderdate 
+B. Show me Constraints in the table 
+C. Drop default constraint from OrderDate column in the table 
+D. Drop the table
+*/
+
+--A. Create a table ‘Orders’ with columns as below
+
+create table Orders
+(
+	OrderId int identity not null primary key,
+	OderDate smalldatetime not null default getdate(),
+	ProductId int not null,
+	Quantity int not null check(Quantity>0),
+	ShipDate smalldatetime ,
+	check(ShipDate>OderDate)
+);
+go
+
+--B. Show me Constraints in the table
+exec  sp_helpconstraint Orders;
+go
+
+--C. Drop default constraint from OrderDate column in the table
+alter table Orders
+drop constraint DF__Orders__OderDate__48CFD27E;
+go
+
+--D. Drop the table 
+drop table Orders;
+go
