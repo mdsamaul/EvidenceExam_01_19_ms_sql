@@ -850,3 +850,49 @@ from PromotionSales;
 
 select *
 from viewPromotionSales;
+
+
+
+/*
+Evidence 17
+A. Create a table “Classes” as Described
+Column Datatype Nullability
+ClassId INT NOT NULL
+Description VARCHAR(100) NOT NULL
+ClassHour INT NOT NULL
+B. You want to apply procedural integrity on column CourseHour instead of check constraint. Create procedure to insert data 
+into “Classes” table and make sure that value in ClassHour column is not less than 2. 
+C. Insert some test values and show that the integrity rule is working 
+*/
+
+--A. Create a table “Classes” as Described
+create table Classes
+(
+	ClassId int not null primary key,
+	Description varchar(100) not null,
+	ClassHour int not null
+);
+go
+
+create procedure InsertClass
+@ClassId int,
+@ClassName varchar(50),
+@CourseHour int
+as
+begin
+	if @CourseHour>2
+	begin
+	insert into Classes
+	values(@ClassId, @ClassName, @CourseHour);
+	end;
+	else
+	begin
+	raiserror('Class hour must be at least 2.',16,1);
+	end
+end;
+go
+
+--C. Insert some test values and show that the integrity rule is working
+exec InsertClass 1,'sql server',3;
+exec InsertClass 1,'sql server',1;
+
