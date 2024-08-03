@@ -896,3 +896,101 @@ go
 exec InsertClass 1,'sql server',3;
 exec InsertClass 1,'sql server',1;
 
+/*
+Evidence 18
+A. You have the following two tables as described 
+B. The two tables have the following data 
+Trainees Exam_results
+id name id marks
+1 Kamal 1 75.5
+2 Rahmat 2 89.3
+3 salma 3 67
+4 Enam
+C. Show me the name of the trainees along with marks like below 
+Kamal 75.5
+Rahmat 89.3
+Salma 67
+D. Show me the name of the trainees along with marks but include all the trainees whose marks is not available like below 
+Kamal 75.5
+Rahmat 89.3
+Salma 67
+Enam NULL
+E. Find out the name of the trainees who got highest marks 
+F. Find out the name of the trainees who got lowest marks 
+G. Find out average marks obtained by trainees 
+*/
+
+--A. You have the following two tables as described 
+
+drop table Trainees;
+create table Trainees(
+	id int primary key,
+	name varchar(40)
+);
+go
+
+create table exam_result(
+id int primary key,
+marks float,
+constraint fk_trainees_id foreign key(id) references Trainees(id)
+);
+go
+
+--The two tables have the following data
+insert into Trainees
+values
+(1,'Kamal'),
+(2,'Rahmat'),
+(3,'Salma'),
+(4,'Enam');
+go
+
+
+insert into exam_result
+values
+(1,75.5),
+(2,83.3),
+(3,67);
+go
+
+--Show me the name of the trainees along with marks like below 
+select t.name, e.marks
+from Trainees t join exam_result e
+on t.id=e.id;
+
+--D. Show me the name of the trainees along with marks but include all the trainees whose marks is not available like below
+
+select distinct t.name, e.marks
+from Trainees t left join exam_result e
+on t.id=e.id;
+go
+
+--E. Find out the name of the trainees who got highest marks 
+select t.name, max(marks)
+from Trainees t
+join exam_result e
+on t.id=e.id
+group by e.marks, t.name
+go
+
+select max(marks) as h
+from exam_result;
+
+select t.name
+from Trainees t
+join exam_result e on t.id= e.id
+where e.marks = (select max(marks) from exam_result);
+go
+
+--. Find out the name of the trainees who got lowest marks
+select min(marks) from exam_result;
+
+select t.name 
+from Trainees t join exam_result e
+on t.id= e.id 
+where e.marks = (select min(marks) from exam_result);
+go
+
+--Find out average marks obtained by trainees
+select cast(avg(marks) as decimal(10,2))
+from exam_result;
