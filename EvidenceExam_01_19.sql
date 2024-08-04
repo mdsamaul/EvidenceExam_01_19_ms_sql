@@ -994,3 +994,174 @@ go
 --Find out average marks obtained by trainees
 select cast(avg(marks) as decimal(10,2))
 from exam_result;
+
+/*
+Evidence 19
+All the works are based on Northwind sample database in SQL Server 2016. 
+A. Create view that selects CustomerId, CompanyName, Country, City column from Customers table 
+a. test the view 
+b. extract SQL commands used in creating the view 
+B. Show customers who live in USA, UK and Germany along with CustomerId, CompanyName,and Country. And also sort the 
+resultset by Country in Descending order 
+C. Show customers who live in USA, UK and Germany along with CustmerId, CompanyName,and County. But you want to 
+change column heads – Customer Code for CustomerID column, ‘Company’ for ComanyName column and ‘Origin’ for 
+Country column. 
+D. Show order information from Orders table for orders placed between date January 01, 1997 and December 31, 2000. 
+E. Show cusomers’ information from Customers table only for those customers whose CompanyName starts with letter ‘A’.
+F. Show the latest 3 orders from Orders table. 
+G. Show the oldest 3 orders from Orders table. 
+H. Show all orders from Orders for each customer along with CustomerID, ComapnyName, OrderID, OrderDate. 
+I. Show all orders from Orders for each customer along with cusomerID, ComapnyName, OrderID, OrderDate and also you 
+want to include all the rows from Customers table. [Hint: left outer join] 
+J. You have to prepare a list of cities in which there are customers along with any employees in these cities. In addition, if 
+there is an employee in a city with no customers, they should be included. Include customerID, City from Customers table 
+and FirstName, City from employees table. 
+K. Show No of Customers in Customers table. 
+L. Show No of Customers by Country from Customers table 
+M. Show No of Customers living in ‘USA’ from Customers table 
+N. Show how many orders each customer placed. 
+O. Show each customer and the dollar amount (sum of order value) for that customer. 
+P. Show the list of customers’ cities but including duplicate cities once. 
+Q. Show the list of customers’ cities from both Customers and Employees but including duplicate cities once
+R. Select information of Customers who live in cities where at least one Employee lives.
+*/
+--All the works are based on Northwind sample database in SQL Server 2016. 
+use Northwind;
+go
+
+--A. Create view that selects CustomerId, CompanyName, Country, City column from Customers table 
+
+
+create view viewCustomers as
+select CustomerID, CompanyName, Country, City
+from Customers;
+go
+
+--a. test the view 
+
+select * from viewCustomers;
+go
+
+--extract SQL commands used in creating the view
+
+select OBJECT_DEFINITION(OBJECT_ID('viewCustomers'));
+go
+--B. Show customers who live in USA, UK and Germany along with CustomerId, CompanyName,and Country. And also sort the 
+--resultset by Country in Descending order 
+
+select CustomerID, CompanyName,Country
+from customers
+where Country in ('usa', 'uk','germany')
+order by Country desc;
+go
+
+--C. Show customers who live in USA, UK and Germany along with CustmerId, CompanyName,and County. But you want to 
+--change column heads – Customer Code for CustomerID column, ‘Company’ for ComanyName column and ‘Origin’ for 
+--Country column
+
+select CustomerID 'Customer Code', CompanyName 'company', Country 'Origin'
+from customers
+where Country in ('usa','uk', 'germany');
+go
+
+
+--D. Show order information from Orders table for orders placed between date January 01, 1997 and December 31, 2000. 
+select *
+from Orders
+where OrderDate between '1997-01-01' and '2000-12-31';
+go
+
+--E. Show cusomers’ information from Customers table only for those customers whose CompanyName starts with letter ‘A’
+select *
+from Customers 
+where CompanyName like 'A%';
+go
+
+--F. Show the latest 3 orders from Orders table.
+select top 3 * 
+from Orders
+order by OrderDate desc
+
+--G. Show the oldest 3 orders from Orders table. 
+--F. Show the latest 3 orders from Orders table.
+select top 3 * 
+from Orders
+order by OrderDate asc
+
+
+--H. Show all orders from Orders for each customer along with CustomerID, ComapnyName, OrderID, OrderDate.
+select o.CustomerID, c.CompanyName, o.OrderID, o.OrderDate
+from Orders o, Customers c;
+
+--I. Show all orders from Orders for each customer along with cusomerID, ComapnyName, OrderID, OrderDate and also you 
+--want to include all the rows from Customers table. [Hint: left outer join]
+
+select o.CustomerID, c.CompanyName, o.OrderID, o.OrderDate
+from Orders o
+left outer join Customers c
+on o.CustomerID= c.CustomerID;
+go
+
+--J. You have to prepare a list of cities in which there are customers along with any employees in these cities. In addition, if 
+--there is an employee in a city with no customers, they should be included. Include customerID, City from Customers table 
+--and FirstName, City from employees table. 
+select c.CustomerID, c.City as customercity , e.FirstName, e.City
+from Customers c
+full outer join Employees e
+on c.City=e.City
+order by coalesce(c.City, e.City);
+go
+
+--K. Show No of Customers in Customers table.
+select count(*) NumberOfCustomers
+from Customers;
+go
+
+--L. Show No of Customers by Country from Customers table
+select country, count(country) NumberOfCountry
+from Customers
+group by Country
+order by NumberOfCountry asc;
+go
+
+--M. Show No of Customers living in ‘USA’ from Customers table
+select count('usa')
+from Customers
+where Country = 'usa';
+go
+
+--N. Show how many orders each customer placed.
+select c.CustomerID, c.CompanyName, count(OrderID) NumberOfOrders
+from Customers c join Orders o
+on c.CustomerID =o.CustomerID
+group by c.CustomerID, c.CompanyName;
+
+--O. Show each customer and the dollar amount (sum of order value) for that customer. 
+select c.CustomerID, c.CompanyName, sum(o.Freight) totalOrderValue
+from Customers c
+join Orders o
+on c.CustomerID= o.CustomerID
+group by c.CustomerID, c.CompanyName;
+go
+
+--P. Show the list of customers’ cities but including duplicate cities once
+
+select distinct City
+from Customers
+go
+
+--Q. Show the list of customers’ cities from both Customers and Employees but including duplicate cities once
+select City
+from Customers
+union
+select city
+from  Employees;
+
+
+--R. Select information of Customers who live in cities where at least one Employee lives.
+
+select *
+from Customers c
+inner join Employees e
+on c.City= e.City;
+go
